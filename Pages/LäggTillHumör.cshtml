@@ -1,0 +1,22 @@
+﻿@page
+@model Robot.LäggTillHumörModel
+@{
+    ViewData["Title"] = "Lägg till humör";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <label>Humör (emoji):</label>
+    <input type="text" name="Emoji" required />
+    <br />
+    <label>Text:</label>
+    <input type="text" name="Text" required />
+    <br /><br />
+    <button type="submit">Spara humör</button>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <p style="color: green">@Model.Message</p>
+}

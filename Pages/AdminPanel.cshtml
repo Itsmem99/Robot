@@ -1,0 +1,49 @@
+﻿@page
+@model AdminPanelModel
+@{
+    ViewData["Title"] = "Adminpanel";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Totalt antal humörposter: @Model.TotalMoods</p>
+
+<h3>Antal per Emoji:</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Emoji</th>
+            <th>Antal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MoodsPerEmoji)
+        {
+            <tr>
+                <td>@item.Emoji</td>
+                <td>@item.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Senaste posterna:</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Emoji</th>
+            <th>Text</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mood in Model.LatestMoods)
+        {
+            <tr>
+                <td>@mood.Id</td>
+                <td>@mood.Emoji</td>
+                <td>@mood.Text</td>
+            </tr>
+        }
+    </tbody>
+</table>

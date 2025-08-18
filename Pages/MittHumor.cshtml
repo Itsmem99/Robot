@@ -1,0 +1,70 @@
+﻿@page
+@model MittHumorModel
+@{
+    ViewData["Title"] = "Mitt Humör";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-info">@Model.StatusMessage</div>
+}
+
+@if (Model.IsAdmin)
+{
+    <a href="/AdminPanel" class="btn btn-warning mb-3">Adminpanel</a>
+}
+
+<form method="post" class="mb-3">
+    <div class="input-group mb-2">
+        <input type="text" asp-for="NewMood.Emoji" placeholder="Emoji" class="form-control" required />
+        <input type="text" asp-for="NewMood.Text" placeholder="Text" class="form-control" required />
+        <button type="submit" class="btn btn-success">Lägg till</button>
+    </div>
+</form>
+
+@if (Model.MoodEntries == null || !Model.MoodEntries.Any())
+{
+    <p>Inga humörposter sparade än.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Emoji</th>
+                <th>Text</th>
+                @if (Model.IsAdmin)
+                {
+                    <th>Ta bort</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mood in Model.MoodEntries)
+            {
+                <tr>
+                    <td>@mood.Id</td>
+                    <td>@mood.Emoji</td>
+                    <td>@mood.Text</td>
+                    @if (Model.IsAdmin)
+                    {
+                        <td>
+                            <form method="post" asp-page-handler="Delete"
+                                  onsubmit="return confirm('Är du säker på att du vill ta bort denna post?');">
+                                <input type="hidden" name="id" value="@mood.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Ta bort</button>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (Model.IsAdmin)
+{
+    <a asp-page="/AdminPanel" class="btn btn-primary mb-3">Adminpanel</a>
+}

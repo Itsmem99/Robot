@@ -1,0 +1,12 @@
+﻿@page
+@model TipsModel
+@{
+    ViewData["Title"] = "Tips";
+}
+
+<h2>💡 Dagens tips</h2>
+<p>@Model.Tip</p>
+
+<form method="post">
+    <button type="submit">Ge mig ett nytt tips!</button>
+</form>
