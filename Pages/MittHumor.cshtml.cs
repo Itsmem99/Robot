@@ -18,7 +18,6 @@ public class MittHumorModel : PageModel
     public List<MoodEntry> MoodEntries { get; set; }
     [BindProperty] public MoodEntry NewMood { get; set; }
     public bool IsAdmin { get; set; }
-
     [TempData] public string StatusMessage { get; set; }  // Meddelande till användaren
 
     public async Task OnGetAsync()

@@ -49,8 +49,11 @@ else
                     <td>@mood.Id</td>
                     <td>@mood.Emoji</td>
                     <td>@mood.Text</td>
-                    @if (Model.IsAdmin)
-                    {
+                    <td>@mood.User.Mail</td>
+                    
+                   
+
+                    
                         <td>
                             <form method="post" asp-page-handler="Delete"
                                   onsubmit="return confirm('Är du säker på att du vill ta bort denna post?');">
