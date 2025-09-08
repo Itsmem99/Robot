@@ -32,17 +32,17 @@ public class LäggTillHumörModel : PageModel
             return Page();
         }
 
-        // Skapa mood-entry
+        // Skapa nytt humör-inlägg
         var mood = new MoodEntry
         {
             Emoji = Emoji,
             Text = Text
         };
 
-        // Försök spara i databasen först
+        // Försök spara i databasen
         try
         {
-        _context.MoodEntries.Add(mood);
+            _context.MoodEntries.Add(mood);
             await _context.SaveChangesAsync();
             Message = "Humör sparat i databasen!";
         }
@@ -52,11 +52,10 @@ public class LäggTillHumörModel : PageModel
             return Page();
         }
 
-        // Skicka till API
+        // Försök skicka till API
         try
         {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7207/"); // API-adress
+            var client = _httpClientFactory.CreateClient("MyApi"); // Länkas till appsettings.json → BaseUrl
 
             var payload = new
             {
@@ -72,7 +71,8 @@ public class LäggTillHumörModel : PageModel
             }
             else
             {
-                Message += " Kunde inte skicka till API:t.";
+                var errorText = await response.Content.ReadAsStringAsync();
+                Message += $" Kunde inte skicka till API:t. Status: {response.StatusCode}. Fel: {errorText}";
             }
         }
         catch (Exception ex)

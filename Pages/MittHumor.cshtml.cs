@@ -30,8 +30,12 @@ public class MittHumorModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid) return Page();
-
+        //if (!ModelState.IsValid) return Page();
+        var user = await _userManager.GetUserAsync(User);
+        var swedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm");
+        DateTime swedenNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, swedenTimeZone);
+        NewMood.Date = swedenNow;
+        NewMood.Usermail= user.Email;
         _context.MoodEntries.Add(NewMood);
         await _context.SaveChangesAsync();
 
@@ -42,7 +46,7 @@ public class MittHumorModel : PageModel
     public async Task<IActionResult> OnPostDeleteAsync(int id)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null || user.Email != "Admin@Robot.se")
+        if (user == null )
             return Forbid();
 
         var mood = await _context.MoodEntries.FindAsync(id);

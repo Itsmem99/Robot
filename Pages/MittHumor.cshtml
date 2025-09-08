@@ -20,6 +20,7 @@
     <div class="input-group mb-2">
         <input type="text" asp-for="NewMood.Emoji" placeholder="Emoji" class="form-control" required />
         <input type="text" asp-for="NewMood.Text" placeholder="Text" class="form-control" required />
+        
         <button type="submit" class="btn btn-success">Lägg till</button>
     </div>
 </form>
@@ -36,10 +37,11 @@ else
                 <th>ID</th>
                 <th>Emoji</th>
                 <th>Text</th>
-                @if (Model.IsAdmin)
-                {
+                <th>User</th>
+                <th>Date</th>
+                
                     <th>Ta bort</th>
-                }
+                
             </tr>
         </thead>
         <tbody>
@@ -49,7 +51,9 @@ else
                     <td>@mood.Id</td>
                     <td>@mood.Emoji</td>
                     <td>@mood.Text</td>
-                    <td>@mood.User.Mail</td>
+                    <td>@mood.Usermail</td>
+                    <td>@mood.Date</td>
+
                     
                    
 
@@ -61,7 +65,7 @@ else
                                 <button type="submit" class="btn btn-danger btn-sm">Ta bort</button>
                             </form>
                         </td>
-                    }
+                    
                 </tr>
             }
         </tbody>

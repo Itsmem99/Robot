@@ -1,25 +1,35 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Robot; // Din egen namespace med AppDbContext och modeller
+using Robot; // يحتوي على AppDbContext والنماذج Models
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Lägg till DbContext (SQL Server)
+// 🗂️ الاتصال بقاعدة البيانات (SQL Server)
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
-// Lägg till Identity
+// 🌐 إعداد HttpClient للاتصال بـ API خارجي
+builder.Services.AddHttpClient("MyApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]);
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
+// 🔐 إعداد نظام تسجيل الدخول (Identity)
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<AppDbContext>();
 
-// Lägg till Razor Pages
+// 🧾 دعم Razor Pages
 builder.Services.AddRazorPages();
 
+// 🚀 بناء التطبيق
 var app = builder.Build();
 
-// Middleware
+// ⚙️ Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -34,7 +44,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Mappa Razor Pages och Controllers
+// 📍 ربط الصفحات والموجهات
 app.MapRazorPages();
 app.MapControllers();
 app.MapDefaultControllerRoute();
