@@ -25,7 +25,7 @@ public class MittHumorModel : PageModel
         MoodEntries = await _context.MoodEntries.ToListAsync();
 
         var user = await _userManager.GetUserAsync(User);
-        IsAdmin = user != null && user.Email == "Admin@Robot.se";
+        IsAdmin = user != null && user.Email == "Admin@ROBOT.se";
     }
 
     public async Task<IActionResult> OnPostAsync()

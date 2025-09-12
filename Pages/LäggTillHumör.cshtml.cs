@@ -16,12 +16,8 @@ public class LäggTillHumörModel : PageModel
         _httpClientFactory = httpClientFactory;
     }
 
-    [BindProperty]
-    public string Emoji { get; set; } = "";
-
-    [BindProperty]
-    public string Text { get; set; } = "";
-
+    [BindProperty] public string Emoji { get; set; } = "";
+    [BindProperty] public string Text { get; set; } = "";
     public string? Message { get; set; }
 
     public async Task<IActionResult> OnPostAsync()
@@ -32,14 +28,8 @@ public class LäggTillHumörModel : PageModel
             return Page();
         }
 
-        // Skapa nytt humör-inlägg
-        var mood = new MoodEntry
-        {
-            Emoji = Emoji,
-            Text = Text
-        };
+        var mood = new MoodEntry { Emoji = Emoji, Text = Text };
 
-        // Försök spara i databasen
         try
         {
             _context.MoodEntries.Add(mood);
@@ -52,23 +42,13 @@ public class LäggTillHumörModel : PageModel
             return Page();
         }
 
-        // Försök skicka till API
         try
         {
-            var client = _httpClientFactory.CreateClient("MyApi"); // Länkas till appsettings.json → BaseUrl
-
-            var payload = new
-            {
-                Emoji = Emoji,
-                Text = Text
-            };
-
-            var response = await client.PostAsJsonAsync("api/messages", payload);
+            var client = _httpClientFactory.CreateClient("MyApi");
+            var response = await client.PostAsJsonAsync("api/messages", mood);
 
             if (response.IsSuccessStatusCode)
-            {
                 Message += " Meddelandet skickades också till API:t!";
-            }
             else
             {
                 var errorText = await response.Content.ReadAsStringAsync();
@@ -80,10 +60,8 @@ public class LäggTillHumörModel : PageModel
             Message += $" Fel vid API-anrop: {ex.Message}";
         }
 
-        // Nollställ formuläret
         Emoji = "";
         Text = "";
-
         return Page();
     }
 }
